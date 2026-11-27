@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Commute vs Rent</title>
+<style>body{font:16px system-ui,sans-serif;max-width:560px;margin:1rem auto;padding:0 1rem}label{display:block;margin:.5rem 0 .1rem}input{width:100%;box-sizing:border-box;padding:.4rem;font-size:1rem}.res{margin-top:1rem;padding:.7rem;border:1px solid #888;border-radius:6px}</style></head><body>
+<h1>Commute vs Rent</h1>
+<p>Is a higher rent worth a shorter commute? This shows what each hour saved costs you. Money is per month, commute minutes are the round trip per working day.</p>
+<label>Current rent</label><input id="currentRent" type="number" min="0">
+<label>New rent</label><input id="newRent" type="number" min="0">
+<label>Current commute (minutes per day, round trip)</label><input id="currentCommuteMin" type="number" min="0">
+<label>New commute (minutes per day, round trip)</label><input id="newCommuteMin" type="number" min="0">
+<label>Working days per month</label><input id="workDays" type="number" min="0" value="21">
+<label>Current commute cost per month (gas, transit, parking), optional</label><input id="currentCommuteCost" type="number" min="0">
+<label>New commute cost per month, optional</label><input id="newCommuteCost" type="number" min="0">
+<label>What is an hour of your free time worth to you? Optional</label><input id="hourValue" type="number" min="0">
+<button id="go" style="margin-top:.8rem;padding:.5rem 1rem;font-size:1rem">Calculate</button>
+<div id="out"></div>
+<script src="calc.js"></script>
+<script>
+const ids = ["currentRent", "newRent", "currentCommuteMin", "newCommuteMin", "workDays", "currentCommuteCost", "newCommuteCost", "hourValue"];
+document.getElementById("go").onclick = () => {
+  const o = {}; ids.forEach((i) => (o[i] = document.getElementById(i).value));
+  const r = commuteVsRent(o);
+  const e = document.createElement("div"); e.className = "res";
+  e.textContent = "Extra rent: " + r.extraRent + " per month. Net extra cost after commute savings: " + r.netExtraCost + ". Time saved: " + r.hoursSavedPerMonth + " hours per month." + (r.costPerHourSaved === null ? "" : " Cost per hour saved: " + r.costPerHourSaved + ".") + " " + r.verdict;
+  const out = document.getElementById("out"); out.innerHTML = ""; out.appendChild(e);
+};
+</script></body></html>
